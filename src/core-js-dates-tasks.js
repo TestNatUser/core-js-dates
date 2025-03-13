@@ -63,8 +63,10 @@ function getDayName(date) {
  * Date('2024-02-13T00:00:00Z') => Date('2024-02-16T00:00:00Z')
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
-function getNextFriday(/* date */) {
-  throw new Error('Not implemented');
+function getNextFriday(date) {
+  const sum = date.getDay() === 6 ? 6 : date.getDay() - 5;
+  date.setDate(date.getDate() + Math.abs(sum === 0 ? 7 : sum));
+  return new Date(date.toISOString());
 }
 
 /**
@@ -162,8 +164,22 @@ function formatDate(date) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  const date = new Date();
+  date.setMonth(month);
+  date.setYear(year);
+  const newMonth = new Date();
+  newMonth.setMonth(month === 12 ? 1 : month + 1);
+  newMonth.setYear(year);
+  const days = Math.ceil((newMonth - date) / 86400000);
+  const sum = date.getDay() + (days % 7);
+  if (sum < 6) {
+    return 8;
+  }
+  if (sum >= 7) {
+    return 10;
+  }
+  return 9;
 }
 
 /**
