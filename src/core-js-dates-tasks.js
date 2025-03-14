@@ -166,17 +166,17 @@ function formatDate(date) {
  */
 function getCountWeekendsInMonth(month, year) {
   const date = new Date();
-  date.setMonth(month);
+  date.setMonth(month - 1, 1);
   date.setYear(year);
   const newMonth = new Date();
-  newMonth.setMonth(month === 12 ? 1 : month + 1);
-  newMonth.setYear(year);
+  newMonth.setMonth(month === 12 ? 0 : month, 1);
+  newMonth.setYear(month === 12 ? year + 1 : year);
   const days = Math.ceil((newMonth - date) / 86400000);
   const sum = date.getDay() + (days % 7);
-  if (sum < 6) {
+  if (sum < 7 && date.getDay() !== 0) {
     return 8;
   }
-  if (sum >= 7) {
+  if (sum > 7) {
     return 10;
   }
   return 9;
